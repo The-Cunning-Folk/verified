@@ -15,7 +15,7 @@ entity.y = 0
 entity.w = 8
 entity.h = 8
 entity.sprite = 0
-entity.speed = 3
+entity.speed = 2
 entity.moving = false
 
 function entity:new (o)
@@ -84,8 +84,8 @@ end
 function collision(ent)
 	local x1 = ent.x
 	local y1 =	ent.y
-	local x2 = ent.x+ent.w-1
-	local y2 =	ent.y+ent.h-1
+	local x2 = ent.x+ent.w
+	local y2 =	ent.y+ent.h
 	local b1 = box(x1,x2,y1,y2)
 	local cx1 = getcell(x1)
 	local cx2 = getcell(x2)
@@ -157,6 +157,31 @@ function collision(ent)
 
 end
 
+function movetowards(ent,tar)
+		--enemy pathing
+	
+	local delx = tar.x - ent.x
+	local dely = tar.y - ent.y
+	local delm = mag(delx,dely)
+	if (delm > 10) then
+	 delm = 1.0/delm
+		delx = delm*delx
+		dely = delm*dely
+		ent:move(delx,dely)
+	end
+	
+end
+
+function newentity(x,y,sprite)
+
+	local ent = entity:new()
+	ent.x = x
+	ent.y = y
+	ent.sprite = sprite
+	return ent
+	
+end
+
 --game functions
 
 function _init()
@@ -164,28 +189,87 @@ function _init()
  p.sprite = 5
  p.x = 64
  p.y = 60
- e = entity:new()
  camx = p.x
  camy = p.y
  cambox = 24
+ 
+ tweeting = false
+ 
+end
+
+function buildtweet(str)
+	local tweet = ""
+	local maxlength = 24
+	local length = 0
+	local lastspace = 0
+	local subpos = {}
+	for i=1,#str do
+		length += 1
+		if sub(str,i,i) == " " then
+			lastspace = i
+		end
+		if length >= maxlength then
+			subpos[#subpos+1] = lastspace
+			length = 0
+		end
+	end
+	
+	subpos[#subpos+1] = #str
+	
+	local substart = 0
+	
+	for i=1,#subpos do
+		local bit = sub(str,substart,subpos[i]).."\n"
+		substart = subpos[i]+1
+		tweet = tweet .. bit
+	end
+	return tweet
+
 end
 
 function _update()
 
 	--player controls
- pdx = 0
- pdy = 0
-	if(btn(0)) then pdx -= 1 end
-	if(btn(1)) then pdx += 1 end
-	if(btn(2)) then pdy -= 1 end
-	if(btn(3)) then pdy += 1 end
-	if mag(pdx,pdy) > 1 then
-		pdx = pdx*isqrt2
-		pdy = pdy*isqrt2
+	if not tweeting then
+	 pdx = 0
+	 pdy = 0
+		if(btn(0)) then pdx -= 1 end
+		if(btn(1)) then pdx += 1 end
+		if(btn(2)) then pdy -= 1 end
+		if(btn(3)) then pdy += 1 end
+		if mag(pdx,pdy) > 1 then
+			pdx = pdx*isqrt2
+			pdy = pdy*isqrt2
+		end
+		p:move(pdx,pdy)
 	end
-	p:move(pdx,pdy)
 	
 	collision(p)
+	
+	--tweeting
+	
+	if btn(5) then
+		tweeting = true
+		tweetstring = ""
+		targettweet = buildtweet("nothing makes me want to read your sci fi book more than seeing guys in fedoras slamming it on goodreads.")
+		chars = 0
+		ctime = time()
+	end
+	
+	if tweeting then
+		if (time()-ctime)>0.03 then
+			chars+=1
+			ctime = time()
+		end
+		tweetstring = sub(targettweet,0,chars)
+	end
+	
+	if tweeting and btn(4) then
+		tweeting = false
+	end
+	
+	
+	
 	--camera positioning
 	
 	cdelpx = p.x - camx
@@ -206,19 +290,6 @@ function _update()
 		end
 	end
 	
-	
-	--enemy pathing
-	
-	delx = p.x - e.x
-	dely = p.y - e.y
-	delm = mag(delx,dely)
-	if (delm > 10) then
-	 delm = 1.0/delm
-		delx = delm*delx
-		dely = delm*dely
-		e:move(delx,dely)
-	end
-	
 	camera(camx-64,camy-60)
 	
 end
@@ -227,7 +298,18 @@ function _draw()
 		cls()
 		map(0,0,0,0,16,16)
   spr(p.sprite, p.x, p.y)
-		spr(e.sprite, e.x, e.y)
+  if tweeting then
+  	rectfill(camx-58, camy-16, camx+58, camy+36, 7)
+  	spr(p.sprite, camx-52, camy-12)
+  	print("swishby",camx-40,camy-10,0)
+  	print("@spacekid",camx-8,camy-10,5)
+  	print(tweetstring,camx-50,camy-1,0)
+  	--print("#verified",camx-46,camy+8,1)
+  	rectfill(camx+20, camy+26, camx+32, camy+32, 1)
+  	rectfill(camx+36, camy+26, camx+48, camy+32, 8)
+  	print("Ž",camx+23,camy+27,7)
+			print("—",camx+39,camy+27,7)
+end
 end
 __gfx__
 00000000099999900011111100aaaaaa0ccccc0000999990006660000060006000444000000dd0d0000030000000200000000000000000000000000000000000
