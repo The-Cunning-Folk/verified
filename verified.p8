@@ -182,19 +182,18 @@ function newentity(x,y,sprite)
 	
 end
 
---game functions
+--tweet functions
 
-function _init()
- p = entity:new()
- p.sprite = 5
- p.x = 64
- p.y = 60
- camx = p.x
- camy = p.y
- cambox = 24
- 
- tweeting = false
- 
+function inittweets()
+	
+	tweets = {}
+	--idle tweets
+	tweets[1] = {}
+	tweets[1][1] = "bored..."
+	tweets[1][2] = "this place is pretty weird tbh"
+	tweets[1][3] = "i block egg accounts btw"
+	
+
 end
 
 function buildtweet(str)
@@ -227,6 +226,32 @@ function buildtweet(str)
 
 end
 
+function choosetweet(trigid)
+	if tweets[trigid]==nil or  #tweets[trigid] == 0 then
+		trigid = 1
+	end
+	return buildtweet(tweets[trigid][flr(rnd(#tweets[trigid]))+1])
+end
+
+
+
+--game functions
+
+function _init()
+ p = entity:new()
+ p.sprite = 5
+ p.x = 64
+ p.y = 60
+ camx = p.x
+ camy = p.y
+ cambox = 24
+ tweeting = false
+ inittweets()
+ 
+end
+
+
+
 function _update()
 
 	--player controls
@@ -251,7 +276,7 @@ function _update()
 	if btn(5) then
 		tweeting = true
 		tweetstring = ""
-		targettweet = buildtweet("nothing makes me want to read your sci fi book more than seeing guys in fedoras slamming it on goodreads.")
+		targettweet = choosetweet(5)
 		chars = 0
 		ctime = time()
 	end
@@ -304,7 +329,6 @@ function _draw()
   	print("swishby",camx-40,camy-10,0)
   	print("@spacekid",camx-8,camy-10,5)
   	print(tweetstring,camx-50,camy-1,0)
-  	--print("#verified",camx-46,camy+8,1)
   	rectfill(camx+20, camy+26, camx+32, camy+32, 1)
   	rectfill(camx+36, camy+26, camx+48, camy+32, 8)
   	print("Ž",camx+23,camy+27,7)
