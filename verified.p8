@@ -1,16 +1,104 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
-function _init()
+--constants
 
+isqrt2 = 1.0/sqrt(2)
+winw = 580
+winh = 540
+
+--entity definitions
+
+entity = {}
+entity.x = 0
+entity.y = 0
+entity.sprite = 0
+entity.speed = 3
+entity.moving = false
+
+function entity:new (o)
+ o = o or {}
+ setmetatable(o, self)
+ self.__index = self
+	return o
+end
+
+function entity:move(dx,dy)
+ self.x += dx*self.speed
+ self.y += dy*self.speed
+end
+
+--vector maths
+
+function mag(vx,vy)
+	return sqrt(vx*vx+vy*vy)
+end
+
+--game functions
+
+function _init()
+ p = entity:new()
+ p.x = 64
+ p.y = 60
+ e = entity:new()
+ camx = p.x
+ camy = p.y
+ cambox = 24
 end
 
 function _update()
 
+	--player controls
+ pdx = 0
+ pdy = 0
+	if(btn(0)) then pdx -= 1 end
+	if(btn(1)) then pdx += 1 end
+	if(btn(2)) then pdy -= 1 end
+	if(btn(3)) then pdy += 1 end
+	if mag(pdx,pdy) > 1 then
+		pdx = pdx*isqrt2
+		pdy = pdy*isqrt2
+	end
+	p:move(pdx,pdy)
+	cdelpx = p.x - camx
+	cdelpy = p.y - camy
+	if abs(cdelpx) > cambox then
+		if p.x < camx then
+		 camx -= abs(cdelpx) - cambox
+		elseif p.x > camx then
+		 camx += abs(cdelpx) - cambox
+		end
+	end
+	
+	if abs(cdelpy) > cambox then
+		if p.y < camy then
+		 camy -= abs(cdelpy) - cambox
+		elseif p.y > camy then
+		 camy += abs(cdelpy) - cambox
+		end
+	end
+	
+	
+	--enemy pathing
+	
+	delx = p.x - e.x
+	dely = p.y - e.y
+	delm = mag(delx,dely)
+	if (delm > 10) then
+	 delm = 1.0/delm
+		delx = delm*delx
+		dely = delm*dely
+		e:move(delx,dely)
+	end
+	
+	camera(camx-64,camy-60)
+	
 end
 
 function _draw()
-
+		cls()
+  spr(p.sprite, p.x, p.y)
+		spr(e.sprite, e.x, e.y)
 end
 __gfx__
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
