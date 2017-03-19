@@ -247,6 +247,7 @@ function _init()
  cambox = 24
  tweeting = false
  inittweets()
+ canceltime = time()
  
 end
 
@@ -273,12 +274,18 @@ function _update()
 	
 	--tweeting
 	
-	if btn(5) then
+	if btn(5) and time()-canceltime>0.3 and  not tweeting then
 		tweeting = true
 		tweetstring = ""
 		targettweet = choosetweet(5)
 		chars = 0
 		ctime = time()
+		ttime = time()	
+	end
+	
+	if btn(5) and tweeting and time()-ttime > 0.5 then
+		tweeting = false
+		canceltime = time()
 	end
 	
 	if tweeting then
@@ -291,6 +298,7 @@ function _update()
 	
 	if tweeting and btn(4) then
 		tweeting = false
+		canceltime = time()
 	end
 	
 	
