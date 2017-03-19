@@ -1,16 +1,233 @@
 pico-8 cartridge // http://www.pico-8.com
 version 8
 __lua__
-function _init()
+--constants
 
+isqrt2 = 1.0/sqrt(2)
+winw = 580
+winh = 540
+
+--entity definitions
+
+entity = {}
+entity.x = 0
+entity.y = 0
+entity.w = 8
+entity.h = 8
+entity.sprite = 0
+entity.speed = 3
+entity.moving = false
+
+function entity:new (o)
+ o = o or {}
+ setmetatable(o, self)
+ self.__index = self
+	return o
+end
+
+function entity:move(dx,dy)
+ self.x += dx*self.speed
+ self.y += dy*self.speed
+end
+
+--vector maths
+
+function mag(vx,vy)
+	return sqrt(vx*vx+vy*vy)
+end
+
+function getcell(x)
+	return flr(x*0.125)
+end
+
+function box(x1,x2,y1,y2)
+	local b = {}
+	b.x1 = x1
+	b.x2 = x2
+	b.y1 = y1
+	b.y2 = y2
+	return b
+end
+
+function mtv(a,b)
+	local tv = {}
+	local lef = b.x1 - a.x2
+	local rig = b.x2 - a.x1
+	local bot = b.y1 - a.y2
+	local top = b.y2 - a.y1
+	
+	if abs(lef) > abs(rig) then
+		tv.x = rig
+	else
+		tv.x = lef
+	end
+	
+	if abs(bot) > abs(top) then
+		tv.y = top
+	else
+		tv.y = bot
+	end
+	
+	if abs(tv.x) <= abs(tv.y) then
+		tv.y = 0
+	else
+		tv.x = 0
+	end
+		
+	return tv	
+end
+
+function boxmtv(ent,b)
+
+end
+
+function collision(ent)
+	local x1 = ent.x
+	local y1 =	ent.y
+	local x2 = ent.x+ent.w-1
+	local y2 =	ent.y+ent.h-1
+	local b1 = box(x1,x2,y1,y2)
+	local cx1 = getcell(x1)
+	local cx2 = getcell(x2)
+	local cy1 = getcell(y1)
+	local cy2 = getcell(y2)
+	local b2 = {}
+	local tl = fget(mget(cx1,cy1),0)
+	local tr = fget(mget(cx2,cy1),0)
+	local bl = fget(mget(cx1,cy2),0)
+	local br = fget(mget(cx2,cy2),0)
+	local tv = {}
+	tv.x = 0
+	tv.y = 0
+	
+	
+	if tl then
+		b2 = box(cx1*8,cx1*8+7,cy1*8,cy1*8+7)
+		local v = mtv(b1,b2)
+		if abs(v.x) > abs(tv.x) then
+			tv.x = v.x
+		end
+		if abs(v.y) > abs(tv.y) then
+			tv.y = v.y
+		end
+	end
+	
+	
+	if tr then
+		b2 = box(cx2*8,cx2*8+7,cy1*8,cy1*8+7)
+		local v = mtv(b1,b2)
+		if abs(v.x) > abs(tv.x) then
+			tv.x = v.x
+		end
+		if abs(v.y) > abs(tv.y) then
+			tv.y = v.y
+		end
+	end
+	
+	
+	if bl then
+		b2 = box(cx1*8,cx1*8+7,cy2*8,cy2*8+7)
+		local v = mtv(b1,b2)
+		if abs(v.x) > abs(tv.x) then
+			tv.x = v.x
+		end
+		if abs(v.y) > abs(tv.y) then
+			tv.y = v.y
+		end	
+	end
+	
+	
+	if br then
+		b2 = box(cx2*8,cx2*8+7,cy2*8,cy2*8+7)
+		local v = mtv(b1,b2)
+		if abs(v.x) > abs(tv.x) then
+			tv.x = v.x
+		end
+		if abs(v.y) > abs(tv.y) then
+			tv.y = v.y
+		end
+	end
+	
+	c = tl or bl or tr or br
+	
+	if c then
+		ent.x += tv.x
+		ent.y += tv.y
+	end
+
+end
+
+--game functions
+
+function _init()
+ p = entity:new()
+ p.sprite = 5
+ p.x = 64
+ p.y = 60
+ e = entity:new()
+ camx = p.x
+ camy = p.y
+ cambox = 24
 end
 
 function _update()
 
+	--player controls
+ pdx = 0
+ pdy = 0
+	if(btn(0)) then pdx -= 1 end
+	if(btn(1)) then pdx += 1 end
+	if(btn(2)) then pdy -= 1 end
+	if(btn(3)) then pdy += 1 end
+	if mag(pdx,pdy) > 1 then
+		pdx = pdx*isqrt2
+		pdy = pdy*isqrt2
+	end
+	p:move(pdx,pdy)
+	
+	collision(p)
+	--camera positioning
+	
+	cdelpx = p.x - camx
+	cdelpy = p.y - camy
+	if abs(cdelpx) > cambox then
+		if p.x < camx then
+		 camx -= abs(cdelpx) - cambox
+		elseif p.x > camx then
+		 camx += abs(cdelpx) - cambox
+		end
+	end
+	
+	if abs(cdelpy) > cambox then
+		if p.y < camy then
+		 camy -= abs(cdelpy) - cambox
+		elseif p.y > camy then
+		 camy += abs(cdelpy) - cambox
+		end
+	end
+	
+	
+	--enemy pathing
+	
+	delx = p.x - e.x
+	dely = p.y - e.y
+	delm = mag(delx,dely)
+	if (delm > 10) then
+	 delm = 1.0/delm
+		delx = delm*delx
+		dely = delm*dely
+		e:move(delx,dely)
+	end
+	
+	camera(camx-64,camy-60)
+	
 end
 
 function _draw()
-
+		cls()
+		map(0,0,0,0,16,16)
+  spr(p.sprite, p.x, p.y)
+		spr(e.sprite, e.x, e.y)
 end
 __gfx__
 00000000099999900011111100aaaaaa0ccccc0000999990006660000060006000444000000dd0d0000030000000200000000000000000000000000000000000
@@ -152,7 +369,7 @@ __map__
 4040404040404040404040404044474500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 4040404040404040404040404044474700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 4743404040404040404040404044474700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-4743404040404040054040404044474600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+4743404040404040404040404044474600000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 4743404040404040404040404044474700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 474b42424242424242424242424a474700000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
