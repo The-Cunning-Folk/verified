@@ -15,7 +15,7 @@ entity.y = 0
 entity.w = 8
 entity.h = 8
 entity.sprite = 0
-entity.speed = 2
+entity.speed = 1
 entity.moving = false
 
 function entity:new (o)
@@ -26,6 +26,11 @@ function entity:new (o)
 end
 
 function entity:move(dx,dy)
+	if abs(dx) > 0 or abs(dy) >0 then
+		self.moving = true
+	else
+		self.moving = false
+	end
  self.x += dx*self.speed
  self.y += dy*self.speed
 end
@@ -157,9 +162,9 @@ function collision(ent)
 
 end
 
-function movetowards(ent,tar)
-		--enemy pathing
-	
+--enemy pathing
+
+function movetowards(ent,tar)	
 	local delx = tar.x - ent.x
 	local dely = tar.y - ent.y
 	local delm = mag(delx,dely)
@@ -179,6 +184,22 @@ function newentity(x,y,sprite)
 	ent.y = y
 	ent.sprite = sprite
 	return ent
+	
+end
+
+--player animation
+
+function animateplayer()
+
+	if p.moving then
+		if p.facing == 0 then
+			p.sprite = 18 + (time()*4)%2
+		elseif p.facing == 1 then
+			p.sprite = 16 + (time()*4)%2
+		elseif p.facing == 2 then
+			p.sprite = 20 + (time()*4)%2
+		end
+	end
 	
 end
 
@@ -233,12 +254,17 @@ function choosetweet(trigid)
 	return buildtweet(tweets[trigid][flr(rnd(#tweets[trigid]))+1])
 end
 
+--interaction
 
+function interact(ispr)
+	p.x -= 1
+end
 
 --game functions
 
 function _init()
  p = entity:new()
+ p.facing = 1
  p.sprite = 5
  p.x = 64
  p.y = 60
@@ -267,10 +293,51 @@ function _update()
 			pdx = pdx*isqrt2
 			pdy = pdy*isqrt2
 		end
+		if pdx > 0 then
+			p.facing = 1
+		elseif pdx < 0 then
+			p.facing = 3
+		end
+		
+		if pdy > 0 then
+			p.facing = 2
+		elseif pdy < 0 then
+			p.facing = 0
+		end
+		
 		p:move(pdx,pdy)
+		animateplayer()
 	end
 	
 	collision(p)
+	
+	--interaction
+	
+	if btn(4) and not tweeting then
+		local corx = 0
+		local cory = 0
+		if p.facing == 0 then
+			cory = -2
+		elseif p.facing == 2 then
+			cory = 10
+		else
+			cory = 4
+		end
+		
+		if p.facing == 1 then
+			corx = 10
+		elseif p.facing == 3 then
+			corx = -2
+		else
+			corx = 4
+		end
+		
+		local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
+	
+		if fget(ispr,1) then
+			interact(ispr)
+		end
+	end
 	
 	--tweeting
 	
