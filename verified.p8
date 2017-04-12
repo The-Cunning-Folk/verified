@@ -349,10 +349,26 @@ function _update()
 			corx = 4
 		end
 		
-		local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
-	
-		if fget(ispr,1) then
-			interact(ispr)
+		local interacting = false
+		
+		for i in pairs(npcs) do
+			local s = npcs[i]
+			if fget(s.sprite,1) then
+				local li = p.x+corx>=s.x
+				local ri = p.x+corx<=s.x+s.w
+				local ti = p.y+cory>=s.y
+				local bi = p.y+cory<=s.y+s.h
+				if (li and ri and ti and bi) then
+					interact(s.sprite)
+				end
+			end
+		end
+		
+		if not interacting then
+			local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
+			if fget(ispr,1) then
+				interact(ispr)
+			end
 		end
 	end
 	
