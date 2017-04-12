@@ -286,7 +286,7 @@ function _init()
  cambox = 24
  
  npcs = {}
-	npcs[1] = newentity(20,20,4)
+	npcs[1] = newentity(20,13,13)
  
  tweeting = false
  inittweets()
@@ -338,9 +338,7 @@ function _update()
 	
 		if fget(s.sprite,6) then
 			s.sprite = s.sprite+1
-		end
-				
-		if fget(s.sprite,7) then
+		elseif fget(s.sprite,7) then
 			s.sprite = s.sprite-1
 		end
 
