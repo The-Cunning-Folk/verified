@@ -191,13 +191,26 @@ end
 
 function animateplayer()
 
+	local fps = 4
 	if p.moving then
 		if p.facing == 0 then
-			p.sprite = 18 + (time()*4)%2
+			p.sprite = 18 + (time()*fps)%2
 		elseif p.facing == 1 then
-			p.sprite = 16 + (time()*4)%2
+			p.sprite = 16 + (time()*fps)%2
 		elseif p.facing == 2 then
-			p.sprite = 20 + (time()*4)%2
+			p.sprite = 20 + (time()*fps)%2
+		elseif p.facing == 3 then
+			p.sprite = 33 + (time()*fps)%2
+		end
+	else
+		if p.facing == 0 then
+			p.sprite = 35
+		elseif p.facing == 1 then
+			p.sprite = 5
+		elseif p.facing == 2 then
+			p.sprite = 36
+		elseif p.facing == 3 then
+			p.sprite = 32
 		end
 	end
 	
@@ -211,8 +224,8 @@ function inittweets()
 	--idle tweets
 	tweets[1] = {}
 	tweets[1][1] = "bored..."
-	tweets[1][2] = "this place is pretty weird tbh"
-	tweets[1][3] = "i block egg accounts btw"
+	tweets[1][2] = "stuck at some station while my ship gets fixed"
+	tweets[1][3] = "im going to be so late..."
 	
 
 end
@@ -271,6 +284,10 @@ function _init()
  camx = p.x
  camy = p.y
  cambox = 24
+ 
+ npcs = {}
+	npcs[1] = newentity(20,20,4)
+ 
  tweeting = false
  inittweets()
  canceltime = time()
@@ -332,10 +349,37 @@ function _update()
 			corx = 4
 		end
 		
-		local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
-	
-		if fget(ispr,1) then
-			interact(ispr)
+		local interacting = false
+		
+		local npcfps = 4
+		
+		for i in pairs(npcs) do
+			local s = npcs[i]
+			
+			if fget(s.sprite,6) then
+				s.sprite = s.sprite+(time()*npcfps)%2
+			end
+			
+			if fget(s.sprite,7) then
+				s.sprite = s.sprite-(time()*npcfps)%2
+			end
+			
+			if fget(s.sprite,1) then
+				local li = p.x+corx>=s.x
+				local ri = p.x+corx<=s.x+s.w
+				local ti = p.y+cory>=s.y
+				local bi = p.y+cory<=s.y+s.h
+				if (li and ri and ti and bi) then
+					interact(s.sprite)
+				end
+			end
+		end
+		
+		if not interacting then
+			local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
+			if fget(ispr,1) then
+				interact(ispr)
+			end
 		end
 	end
 	
@@ -394,13 +438,59 @@ function _update()
 	
 end
 
+function partition(array, left, right, pivotindex,f)
+	local pivotvalue = array[pivotindex]
+	array[pivotindex], array[right] = array[right], array[pivotindex]
+	
+	local storeindex = left
+	
+	for i =  left, right-1 do
+    	if f(array[i],pivotvalue) then
+	        array[i], array[storeindex] = array[storeindex], array[i]
+	        storeindex = storeindex + 1
+		end
+		array[storeindex], array[right] = array[right], array[storeindex]
+	end
+	
+   return storeindex
+end
+
+function quicksort(array, left, right,f)
+	if right > left then
+	    local pivotnewindex = partition(array, left, right, left,f)
+	    quicksort(array, left, pivotnewindex - 1)
+	    quicksort(array, pivotnewindex + 1, right)
+	end
+end
+
+function yind(a,b)
+	return a.y > b.y
+end
+
 function _draw()
 		cls()
 		map(0,0,0,0,16,16)
+		quicksort(npcs,1,#npcs,yind)
+		local l = -1
+		for i in pairs(npcs) do
+			local s = npcs[i]
+			if s.y < p.y then
+				spr(s.sprite,s.x,s.y)
+			else 
+				l = i
+				break
+			end
+		end
   spr(p.sprite, p.x, p.y)
+  if l > 0 then
+		for i=l,#npcs do
+			local s = npcs[i]
+			spr(s.sprite,s.x,s.y)
+		end
+		end
   if tweeting then
   	rectfill(camx-58, camy-16, camx+58, camy+36, 7)
-  	spr(p.sprite, camx-52, camy-12)
+  	spr(5, camx-52, camy-12)
   	print("swishby",camx-40,camy-10,0)
   	print("@spacekid",camx-8,camy-10,5)
   	print(tweetstring,camx-50,camy-1,0)
