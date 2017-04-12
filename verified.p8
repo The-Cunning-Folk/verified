@@ -224,8 +224,8 @@ function inittweets()
 	--idle tweets
 	tweets[1] = {}
 	tweets[1][1] = "bored..."
-	tweets[1][2] = "this place is pretty weird tbh"
-	tweets[1][3] = "i block egg accounts btw"
+	tweets[1][2] = "stuck at some station while my ship gets fixed"
+	tweets[1][3] = "im going to be so late..."
 	
 
 end
@@ -351,8 +351,19 @@ function _update()
 		
 		local interacting = false
 		
+		local npcfps = 4
+		
 		for i in pairs(npcs) do
 			local s = npcs[i]
+			
+			if fget(s.sprite,6) then
+				s.sprite = s.sprite+(time()*npcfps)%2
+			end
+			
+			if fget(s.sprite,7) then
+				s.sprite = s.sprite-(time()*npcfps)%2
+			end
+			
 			if fget(s.sprite,1) then
 				local li = p.x+corx>=s.x
 				local ri = p.x+corx<=s.x+s.w
@@ -479,7 +490,7 @@ function _draw()
 		end
   if tweeting then
   	rectfill(camx-58, camy-16, camx+58, camy+36, 7)
-  	spr(p.sprite, camx-52, camy-12)
+  	spr(5, camx-52, camy-12)
   	print("swishby",camx-40,camy-10,0)
   	print("@spacekid",camx-8,camy-10,5)
   	print(tweetstring,camx-50,camy-1,0)
