@@ -327,6 +327,37 @@ function _update()
 	end
 	
 	collision(p)
+	local npcfps = 1
+	
+
+	
+	if(time()%npcfps) == 0 then
+	
+	for i in pairs(npcs) do
+		local s = npcs[i]
+	
+		if fget(s.sprite,6) then
+			s.sprite = s.sprite+1
+		end
+				
+		if fget(s.sprite,7) then
+			s.sprite = s.sprite-1
+		end
+
+	end
+	
+	for i=1,32 do
+		for j=1,32 do
+			s = mget(i,j)
+			if fget(s,7) then
+				mset(i,j,s-1)
+			elseif fget(s,6) then
+				mset(i,j,s+1)
+			end
+			
+		end
+	end
+	end
 	
 	--interaction
 	
@@ -351,18 +382,10 @@ function _update()
 		
 		local interacting = false
 		
-		local npcfps = 4
-		
 		for i in pairs(npcs) do
 			local s = npcs[i]
 			
-			if fget(s.sprite,6) then
-				s.sprite = s.sprite+(time()*npcfps)%2
-			end
 			
-			if fget(s.sprite,7) then
-				s.sprite = s.sprite-(time()*npcfps)%2
-			end
 			
 			if fget(s.sprite,1) then
 				local li = p.x+corx>=s.x
