@@ -269,8 +269,12 @@ end
 
 --interaction
 
-function interact(ispr)
-	p.x -= 1
+function interact(ispr,sx,sy)
+	if fget(ispr,2) then
+		bubbles[1] = {time(),sx,sy}
+	else
+		exclams[1] = {time(),sx,sy}
+	end
 end
 
 --game functions
@@ -286,6 +290,8 @@ function _init()
  cambox = 24
  
  npcs = {}
+ bubbles = {}
+ exclams = {}
 	npcs[1] = newentity(20,13,13)
  
  tweeting = false
@@ -391,7 +397,7 @@ function _update()
 				local ti = p.y+cory>=s.y
 				local bi = p.y+cory<=s.y+s.h
 				if (li and ri and ti and bi) then
-					interact(s.sprite)
+					interact(s.sprite,s.x,s.y)
 				end
 			end
 		end
@@ -399,7 +405,7 @@ function _update()
 		if not interacting then
 			local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
 			if fget(ispr,1) then
-				interact(ispr)
+				interact(ispr,p.x+corx,p.y+cory)
 			end
 		end
 	end
@@ -490,7 +496,7 @@ end
 
 function _draw()
 		cls()
-		map(0,0,0,0,16,16)
+		map(0,0,0,0,32,32)
 		quicksort(npcs,1,#npcs,yind)
 		local l = -1
 		for i in pairs(npcs) do
@@ -508,6 +514,18 @@ function _draw()
 			local s = npcs[i]
 			spr(s.sprite,s.x,s.y)
 		end
+		end
+		for c=1,#bubbles do
+			local b = bubbles[c]
+			if time() - b[1] < 1.5 then
+				spr(51+2*(time()-b[1]),b[2]-1,b[3]-8)
+			end
+		end
+		for c=1,#exclams do
+			local e = exclams[c]
+			if time() - e[1] < 1.5 then
+				spr(54,e[2]-4,e[3]-12)
+			end
 		end
   if tweeting then
   	rectfill(camx-58, camy-16, camx+58, camy+36, 7)
