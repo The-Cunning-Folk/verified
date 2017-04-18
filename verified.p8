@@ -219,15 +219,23 @@ end
 --tweet functions
 
 function inittweets()
+
+	trig = 1
 	
 	tweets = {}
+	
+	for i=0,64 do
+		tweets[i] = {}
+	end
 	--idle tweets
-	tweets[1] = {}
+	
 	tweets[1][1] = "bored..."
 	tweets[1][2] = "stuck at some station while my ship gets fixed"
 	tweets[1][3] = "im going to be so late..."
 	
-
+	tweets[13][1] = "a homeless guy just said he likes my hat"
+	tweets[14][1] = "always feel bad when i don't have change for people :("
+	
 end
 
 function buildtweet(str)
@@ -256,6 +264,7 @@ function buildtweet(str)
 		substart = subpos[i]+1
 		tweet = tweet .. bit
 	end
+	trig = 0
 	return tweet
 
 end
@@ -270,6 +279,7 @@ end
 --interaction
 
 function interact(ispr,sx,sy)
+trig = ispr
 	if fget(ispr,2) then
 		bubbles[1] = {time(),sx,sy}
 	else
@@ -415,7 +425,7 @@ function _update()
 	if btn(5) and time()-canceltime>0.3 and  not tweeting then
 		tweeting = true
 		tweetstring = ""
-		targettweet = choosetweet(5)
+		targettweet = choosetweet(trig)
 		chars = 0
 		ctime = time()
 		ttime = time()	
