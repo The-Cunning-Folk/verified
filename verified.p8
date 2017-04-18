@@ -302,7 +302,23 @@ function _init()
  npcs = {}
  bubbles = {}
  exclams = {}
-	npcs[1] = newentity(20,13,13)
+	npcs[1] = newentity(20,12,13)
+	npcs[2] = newentity(32,24,38)
+ npcs[3] = newentity(40,24,39)
+ npcs[4] = newentity(32,16,22)
+ npcs[5] = newentity(40,16,23)
+ npcs[6] = newentity(48,24,147)
+ npcs[7] = newentity(56,24,148)
+ npcs[8] = newentity(48,16,131)
+ npcs[9] = newentity(56,16,132)
+ npcs[10] = newentity(64,24,149)
+ npcs[11] = newentity(72,24,150)
+ npcs[12] = newentity(64,16,133)
+ npcs[13] = newentity(72,16,134)
+ npcs[14] = newentity(80,32,6)
+ npcs[15] = newentity(40,50,8)
+ npcs[16] = newentity(120,72,11)
+ npcs[17] = newentity(72,80,4)
  
  tweeting = false
  inittweets()
@@ -360,17 +376,6 @@ function _update()
 
 	end
 	
-	for i=1,32 do
-		for j=1,32 do
-			s = mget(i,j)
-			if fget(s,7) then
-				mset(i,j,s-1)
-			elseif fget(s,6) then
-				mset(i,j,s+1)
-			end
-			
-		end
-	end
 	end
 	
 	--interaction
@@ -475,55 +480,22 @@ function _update()
 	
 end
 
-function partition(array, left, right, pivotindex,f)
-	local pivotvalue = array[pivotindex]
-	array[pivotindex], array[right] = array[right], array[pivotindex]
-	
-	local storeindex = left
-	
-	for i =  left, right-1 do
-    	if f(array[i],pivotvalue) then
-	        array[i], array[storeindex] = array[storeindex], array[i]
-	        storeindex = storeindex + 1
-		end
-		array[storeindex], array[right] = array[right], array[storeindex]
-	end
-	
-   return storeindex
-end
-
-function quicksort(array, left, right,f)
-	if right > left then
-	    local pivotnewindex = partition(array, left, right, left,f)
-	    quicksort(array, left, pivotnewindex - 1)
-	    quicksort(array, pivotnewindex + 1, right)
-	end
-end
-
-function yind(a,b)
-	return a.y > b.y
-end
-
 function _draw()
 		cls()
 		map(0,0,0,0,32,32)
-		quicksort(npcs,1,#npcs,yind)
 		local l = -1
-		for i in pairs(npcs) do
+		for i=1,#npcs do
 			local s = npcs[i]
 			if s.y < p.y then
 				spr(s.sprite,s.x,s.y)
-			else 
-				l = i
-				break
 			end
 		end
   spr(p.sprite, p.x, p.y)
-  if l > 0 then
-		for i=l,#npcs do
+		for i=1,#npcs do
 			local s = npcs[i]
-			spr(s.sprite,s.x,s.y)
-		end
+			if s.y >= p.y then
+				spr(s.sprite,s.x,s.y)
+			end
 		end
 		for c=1,#bubbles do
 			local b = bubbles[c]
