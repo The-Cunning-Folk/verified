@@ -482,7 +482,7 @@ end
 
 function _draw()
 		cls()
-		map(0,0,0,0,32,32)
+		map(0,0,0,0,60,40)
 		local l = -1
 		for i=1,#npcs do
 			local s = npcs[i]
