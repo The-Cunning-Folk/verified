@@ -1,0 +1,104 @@
+tweets[256][1] = "got pulled over by the cops because of my brakelight. eff the pigs."
+tweets[256][2] = "stuck at some station while my ship gets fixed"
+tweets[256][3] = "im going to be so late..."
+tweets[256][4] = "bored..."
+
+--tweets
+
+--sk8r boi
+tweets[0][1] = "this sk8r just shouted that they want to eff the police..."
+tweets[1][1] = "this gentleman has strong feelings about the police"
+tweets[2][1] = "do a NOLLIE!!!"
+tweets[3][1] = "he was a sk8r boi, he said eff the police"
+
+tweets[4][1] = "what the heck is AGILE? This guy is R E A L L Y into it."
+tweets[4][2] = "is AGILE a religion or something?"
+tweets[6][1] = "this kid is crying in a pile of trash. I've been there man, i feel u."
+tweets[7][1] = "this trashgirl is my everything. stay strong trashgirl"
+tweets[8][1] = "a member of the space whaler's union and a mom, that's hardcore"
+tweets[9][1] = "glimmerpunk ain't dead"
+tweets[10][1] = "rihanna killed glimmerpunk"
+tweets[13][1] = "a homeless guy just said he likes my hat"
+tweets[14][1] = "always feel bad when i don't have change for people :("
+tweets[14][2] = "just met someone who's entire planet got destroyed :("
+tweets[15][1] = "CYBER MURRAY!!!"
+tweets[15][2] = "YES! IT'S CYBER MURRAY. I LOVE THESE."
+tweets[15][3] = "BOOZE ME UP CYBER MURRAY!!!"
+tweets[15][4] = "A PAN GALACTIC GARGLE BLASTER FOR ME MURRAY"
+
+--ramen
+tweets[37][1] = "this ramen tastes interdimensional, baby"
+tweets[38][1] = "omg, this guy is making ramen stock from his tears."
+tweets[39][1] = "this broth shimmers, not with light but with darkness visible. lol."
+tweets[40][1] = "god i love noodles. and soup. together. yeah."
+
+tweets[41][1] = "why would you install a personality core in a toilet? :("
+tweets[41][2] = "this toilet is really rude..."
+tweets[43][1] = "a family of magellanic owls have nested in this abandoned trolley"
+tweets[44][1] = "a family of magellanic owls have nested in this abandoned trolley"
+tweets[45][1] = ""
+tweets[46][1] = ""
+
+tweets[48][1] = "urgh, apparently my taillight is going to take a while..."
+tweets[49][1] = "the mechanic isn't even looking at the right end of the ship >:("
+
+tweets[55][1] = "This lady is straight up ignoring me. Too into these wormy nuggs."
+tweets[56][1] = "Pico Chef's sandworm nuggets are super underrated imho."
+tweets[59][1] = "haha, this dancing guy looks just like the BQII main character"
+tweets[60][1] = "For some reason I want to play BQII now..."
+tweets[61][1] = "Someone just tried to sell me a planet. Dude if you saw my bank balance xD"
+tweets[62][1] = "Got a business card from this guy. I think his name is just Jason Business??"
+tweets[98][1] = "I think this self cleaning smart-bathroom got hacked"
+tweets[108][1] = "I swear there's a pico chef at every service station."
+tweets[109][1] = "does anyone actually eat at pico chef?? how are they not bankrupt???"
+tweets[115][1] = "There's nothing more depressing than fake plants."
+tweets[116][1] = "This fake plant has fake fruit on it, and a fake birds nest."
+tweets[117][1] = "I guess this sector of the galaxy isn't into recycling."
+tweets[119][1] = "SAME"
+
+tweets[140][1] = "whats up you cool baby?"
+tweets[141][1] = "this baby just whispered unknowable truths to me, dark things..."
+
+--coffee
+tweets[147][1] = "yuss, I love dark matter spice latte season"
+tweets[148][1] = "this gravitino tastes like nescafe"
+
+--news
+tweets[149][1] = "haha, this shop sells those toys with chocolate eggs inside."
+tweets[150][1] = "all the news is terrible, I have inherited a blighted world."
+
+--arcades
+tweets[153][1] = "these arcade machines are playing wii bowling against each other."
+tweets[154][1] = "I don't want to interupt their game, this machine is winning."
+
+--omniphant
+tweets[160][1] = ""
+tweets[161][1] = "What is an omniscient warrior monk doing in a service station? Something beyond comprehension I guess."
+tweets[162][1] = "this stuff smells like coriander and custard"
+
+--pool
+tweets[163][1] = "I wish this rehydration fluid wasn't super super toxic to me, it looks warm."
+tweets[166][1] = "this stuff smells like coriander and custard"
+
+--red ship
+tweets[173][1] = ""
+tweets[174][1] = ""
+tweets[189][1] = ""
+tweets[190][1] = ""
+
+--ship
+tweets[200][1] = ""
+tweets[201][1] = ""
+tweets[202][1] = ""
+tweets[216][1] = ""
+tweets[218][1] = ""
+tweets[232][1] = ""
+tweets[234][1] = ""
+tweets[248][1] = ""
+tweets[250][1] = ""
+
+tweets[192][1] = "wtf this jellyfish just handed me an autograph."
+tweets[193][1] = "this thing is just furiously signing autographs..."
+tweets[195][1] = "just met a real life zombie spaceship pilot. he was a jerk."
+tweets[224][1] = "beret, designer coat and a battle grade chainsaw. classic look."
+tweets[225][1] = "this guy just asked if he could borrow my kidney :/"

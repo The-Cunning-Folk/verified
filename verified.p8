@@ -229,46 +229,112 @@ function inittweets()
 		tweets[i] = {}
 	end
 	--idle tweets
-tweets[256][1] = "got pulled over by the cops because of my brakelight. eff the pigs."
+tweets[256][1] = "got pulled over by the cops because of my lights. eff the cops."
 tweets[256][2] = "stuck at some station while my ship gets fixed"
 tweets[256][3] = "im going to be so late..."
-tweets[256][4] = "bored..."
+tweets[256][4] = "pulled over by the cops, stuck at this station while my ship gets fixed"
+tweets[256][5] = "this place is a dump, seems like the sort of place that muders happen"
 
 --tweets
-tweets[0][1] = ""
+
+--sk8r boi
+tweets[0][1] = "this sk8r just shouted that they want to eff the police..."
+tweets[1][1] = "this gentleman has strong feelings about the police"
+tweets[2][1] = "do a nollie!!!"
+tweets[3][1] = "he was a sk8r boi, he said eff the police"
+
 tweets[4][1] = "what the heck is agile? this guy is r e a l l y into it."
 tweets[4][2] = "is agile a religion or something?"
 tweets[6][1] = "this kid is crying in a pile of trash. i've been there man, i feel u."
 tweets[7][1] = "this trashgirl is my everything. stay strong trashgirl"
-tweets[8][1] = ""
+tweets[8][1] = "a member of the space whaler's union and a mom, that's hardcore"
 tweets[9][1] = "glimmerpunk ain't dead"
 tweets[10][1] = "rihanna killed glimmerpunk"
 tweets[13][1] = "a homeless guy just said he likes my hat"
 tweets[14][1] = "always feel bad when i don't have change for people :("
 tweets[14][2] = "just met someone who's entire planet got destroyed :("
-tweets[15][1] = "cyber murray!!!"
-tweets[15][2] = "yes! it's cyber murray. i love these."
-tweets[15][3] = "booze me up cyber murray!!!"
+tweets[15][1] = "cyber murray!!! ŒŒŒ"
+tweets[15][2] = "yes! it's Œ cyber murray Œ. i love this guy."
+tweets[15][3] = "booze me up cyber murray!!! ŒŒ"
+tweets[15][4] = "a pan galactic gargle blaster for me murray ~Œ~"
+
+--ramen
+tweets[37][1] = "this ramen tastes interdimensional, baby"
+tweets[38][1] = "omg, this guy is making ramen stock from his tears."
+tweets[39][1] = "this broth shimmers, not with light but with darkness visible. lol."
+tweets[40][1] = "god i love noodles. and soup. together. yeah."
+
+tweets[41][1] = "why would you install a personality core in a toilet? :("
+tweets[41][2] = "this toilet is really rude..."
+tweets[43][1] = "a family of magellanic owls have nested in this abandoned trolley"
+tweets[44][1] = "a family of magellanic owls have nested in this abandoned trolley"
+tweets[45][1] = "this toilet has a functioning webserver inside it"
+tweets[46][1] = "how do i use this thing? :/"
+
+tweets[48][1] = "urgh, apparently my taillight is going to take a while..."
+tweets[49][1] = "the mechanic isn't even looking at the right end of the ship >:("
+
 tweets[55][1] = "this lady is straight up ignoring me. too into these wormy nuggs."
 tweets[56][1] = "pico chef's sandworm nuggets are super underrated imho."
 tweets[59][1] = "haha, this dancing guy looks just like the bqii main character"
 tweets[60][1] = "for some reason i want to play bqii now..."
 tweets[61][1] = "someone just tried to sell me a planet. dude if you saw my bank balance xd"
 tweets[62][1] = "got a business card from this guy. i think his name is just jason business??"
-tweets[98][1] = "i think this self cleaning smart-bathroom got ddos'd"
+tweets[98][1] = "i think this self cleaning smart-bathroom got hacked"
 tweets[108][1] = "i swear there's a pico chef at every service station."
 tweets[109][1] = "does anyone actually eat at pico chef?? how are they not bankrupt???"
 tweets[115][1] = "there's nothing more depressing than fake plants."
 tweets[116][1] = "this fake plant has fake fruit on it, and a fake birds nest."
 tweets[117][1] = "i guess this sector of the galaxy isn't into recycling."
+tweets[119][1] = "same"
+
 tweets[140][1] = "whats up you cool baby?"
-tweets[141][1] = ""
-tweets[147][1] = ""
+tweets[141][1] = "this baby just whispered unknowable truths to me, dark things..."
+
+--coffee
+tweets[147][1] = "the pumpkin spice must flow"
+tweets[148][1] = "what's this in my cup..? omg it's the gom jabbar!"
+
+--news
+tweets[149][1] = "haha, this shop sells those toys with chocolate eggs inside."
+tweets[150][1] = "all the news is terrible, i have inherited a blighted world."
+
+--arcades
+tweets[153][1] = "these arcade machines are playing wii bowling against each other."
+tweets[154][1] = "i don't want to interupt their game, this machine is winning."
+
+--omniphant
+tweets[160][1] = "man, omniphants are so cool, but what's with them all wearing nametags?"
+tweets[161][1] = "what is an omniscient warrior monk doing in a service station? something cool i bet."
+tweets[162][1] = "i hope i transcend to a higher state of being when i grow up. that or own property."
+
+--pool
+tweets[163][1] = "i wish this rehydration fluid wasn't super super toxic to me, it looks warm."
+tweets[166][1] = "this stuff smells like coriander and custard"
+
+--red ship
+tweets[173][1] = "this ship must belong to a tiny space cowboy"
+tweets[174][1] = "this ship is so frictionless that i can barely feel it, also it has a racist bumper sticker."
+tweets[189][1] = "there's dan fogelberg cd on the back seat of this ship, and a knitted sweater"
+tweets[190][1] = "this ship's ai is loudly whistling the riff from wolf creek. pretty unironically good actually."
+
+--ship
+tweets[200][1] = "my good good ship"
+tweets[201][1] = "my beautiful ship, taillight all busted up"
+tweets[202][1] = "can't believe those cops pulled me over for a broken taillight"
+tweets[216][1] = "the magical chariot that will bear me to the house party"
+tweets[218][1] = "every scratch on this thing has a story behind it, most of them involve booze"
+tweets[232][1] = "my noble steed, my majestic war horse <3"
+tweets[234][1] = "of all the stations to end up stopping at, i had to stop here huh?"
+tweets[248][1] = "my junction is literally 2 light years down the hyperway, i'm so late as it is."
+tweets[250][1] = "god, i hope i don't miss this party."
+
 tweets[192][1] = "wtf this jellyfish just handed me an autograph."
 tweets[193][1] = "this thing is just furiously signing autographs..."
 tweets[195][1] = "just met a real life zombie spaceship pilot. he was a jerk."
 tweets[224][1] = "beret, designer coat and a battle grade chainsaw. classic look."
 tweets[225][1] = "this guy just asked if he could borrow my kidney :/"
+
 end
 
 function buildtweet(str)
@@ -751,8 +817,8 @@ ddd6666256666ddd000000000000000000000030003000000000000000000000dddddddddddddddd
 44444441d4444444000000000000000000000000000000000000000000000000dddddddddddddddddddddddd000000000000000033333333555555556666c666
 
 __gff__
-4686468606004686064686468646860700000000000001418101010300438300000000000047874787030003034383004686010000000046864080468646860000010101010000000101010101010101000101010101010101010101030301010001020001000000000101010303010100010103030300010301010101010101
-0707070707070201014383004383010007070707070703014043830001800000070707010101010100010101010101060101000001000100010101010001010607070007468600000303030001010101070700070000000003030300000101010707000000000000030303000001010107070000408040800303030000010101
+4686468606004686064686468646860700000000000001418101010100418100000000000047874787070003034383004686010000000046864080468646860000010101010000000101010101010101000101010101010101010101030301010001020001000000000101010303010100010103030300030301010101010101
+0101010101010001014181004383010001010107070703014043830001800000070707030101030100010101010303060101000001000100010101010003030607070007468600000303030001010101070700070000000003010300000101010707000000000000030103000001010107070000408040800301030000010101
 __map__
 474b42424242424242424242424242424242424242424242424242424242424242424a474547474745474747474747474747474747474747474747474745474747454747454747000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 45485453525354535354535253ff58595958595a5c5dffb1b1b1b1b1b1b1b1b1b1b149474547474747474547474547474747474747474747474746474747474747474747454747000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
