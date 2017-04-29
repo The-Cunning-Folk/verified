@@ -237,7 +237,7 @@ tweets[256][1] = "got pulled over by the cops because of my lights. eff the cops
 tweets[256][2] = "stuck at some station while my ship gets fixed"
 tweets[256][3] = "im going to be so late..."
 tweets[256][4] = "pulled over by the cops, stuck at this station while my ship gets fixed"
-tweets[256][5] = "this place is a dump, seems like the sort of place that muders happen"
+tweets[256][5] = "this place is a dump, seems like the sort of place that murders happen"
 
 --tweets
 
@@ -254,6 +254,8 @@ tweets[7][1] = "this trashgirl is my everything. stay strong trashgirl"
 tweets[8][1] = "a member of the space whaler's union and a mom, that's hardcore"
 tweets[9][1] = "glimmerpunk ain't dead"
 tweets[10][1] = "rihanna killed glimmerpunk"
+tweets[11][1] = "ç take your protein pills and put your helmet on ç"
+tweets[12][1] = "this guy is pretty bad..."
 tweets[13][1] = "a homeless guy just said he likes my hat"
 tweets[14][1] = "always feel bad when i don't have change for people :("
 tweets[14][2] = "just met someone who's entire planet got destroyed :("
@@ -270,8 +272,8 @@ tweets[40][1] = "god i love noodles. and soup. together. yeah."
 
 tweets[41][1] = "why would you install a personality core in a toilet? :("
 tweets[41][2] = "this toilet is really rude..."
-tweets[43][1] = "a family of magellanic owls have nested in this abandoned trolley"
-tweets[44][1] = "a family of magellanic owls have nested in this abandoned trolley"
+tweets[43][1] = "a family of magellanic owls have made a nest in this abandoned trolley"
+tweets[44][1] = "a family of magellanic owls have made a nest in this abandoned trolley"
 tweets[45][1] = "this toilet has a functioning webserver inside it"
 tweets[46][1] = "how do i use this thing? :/"
 
@@ -313,13 +315,13 @@ tweets[161][1] = "what is an omniscient warrior monk doing in a service station?
 tweets[162][1] = "i hope i transcend to a higher state of being when i grow up. that or own property."
 
 --pool
-tweets[163][1] = "i wish this rehydration fluid wasn't super super toxic to me, it looks warm."
+tweets[163][1] = "i wish this rehydration fluid wasn't incredibly toxic to me, it looks warm."
 tweets[166][1] = "this stuff smells like coriander and custard"
 
 --red ship
 tweets[173][1] = "this ship must belong to a tiny space cowboy"
 tweets[174][1] = "this ship is so frictionless that i can barely feel it, also it has a racist bumper sticker."
-tweets[189][1] = "there's dan fogelberg cd on the back seat of this ship, and a knitted sweater"
+tweets[189][1] = "there's a dan fogelberg cd on the back seat of this ship, and a knitted sweater"
 tweets[190][1] = "this ship's ai is loudly whistling the riff from wolf creek. pretty unironically good actually."
 
 --ship
@@ -330,7 +332,7 @@ tweets[216][1] = "the magical chariot that will bear me to the house party"
 tweets[218][1] = "every scratch on this thing has a story behind it, most of them involve booze"
 tweets[232][1] = "my noble steed, my majestic war horse <3"
 tweets[234][1] = "of all the stations to end up stopping at, i had to stop here huh?"
-tweets[248][1] = "my junction is literally 2 light years down the hyperway, i'm so late as it is."
+tweets[248][1] = "my junction is only two light years down the hyperway, i'm so late as it is."
 tweets[250][1] = "god, i hope i don't miss this party."
 
 tweets[192][1] = "wtf this jellyfish just handed me an autograph."
@@ -403,7 +405,8 @@ function buildtweet(str)
 end
 
 function contains(tab,e)
-  for _, value in pairs(tab) do
+  for v in pairs(tab) do
+  	values = tab[v]
     if value == e then
       return true
     end
@@ -459,9 +462,10 @@ function _init()
  lasttweet = false
  textalert = false
  started = false
+ faded = false
  
  written = {}
- maxtweets = 100
+ maxtweets = 20
  
  npcs = {}
  bubbles = {}
@@ -531,7 +535,7 @@ function _init()
  tweeting = false
  inittweets()
  canceltime = time()
- music(0,0,14)
+ 
  
 end
 
@@ -543,6 +547,7 @@ function _update()
 	if btn(4) then
 			started = true
 			starttime = time()
+			music(0,300,14)
 		end
 	end
 
@@ -557,8 +562,8 @@ function _update()
 		if(btn(2)) then pdy -= 1 end
 		if(btn(3)) then pdy += 1 end
 		if mag(pdx,pdy) > 1 then
-			pdx = pdx*isqrt2
-			pdy = pdy*isqrt2
+			pdx = pdx
+			pdy = pdy
 		end
 		if pdx > 0 then
 			p.facing = 1
@@ -736,12 +741,14 @@ end
 function _draw()
 		cls()
 		if started then
-		if time()-starttime < 2 then
-		fade_scr(1-(time()-starttime)*0.75)
+		if time()-starttime < 2 and not faded then
+			fade_scr(1-(time()-starttime)*0.75)
+		else
+			faded = true
 		end
-		map(52,0,-30,0,10,70)
-		map(52,0,-30,-30,10,60)
-		map(38,0,40,-30,60,40)
+		map(52,0,-30,0,5,70)
+		map(52,0,-30,-30,10,5)
+		map(38,0,40,-30,60,5)
 		map(0,0,0,0,60,40)
 		
 		local l = -1
@@ -789,11 +796,11 @@ function _draw()
 		fade_scr((time()-endtime)*0.75)
 	elseif ending and time()-endtime >= 2 and time()-endtime < 8 then
 		fade_scr(1-(time()-endtime-2)*0.75)
-		map(94,0,camx-90,camy-110,22,22)
-		print("see you @spacekid...",camx-24,camy+55)
+		map(94,0,camx-90,camy-110,22,23)
+		print("see you, @spacekid...",camx-24,camy+55)
 	elseif ending and time()-endtime >= 8 then	
 		fade_scr((time()-(endtime+8))*0.75)
-		map(94,0,camx-90,camy-110,22,22)
+		map(94,0,camx-90,camy-110,22,23)
 		print("see you, @spacekid...",camx-24,camy+55)
 		music(-1, 400)
 	end
