@@ -337,6 +337,35 @@ tweets[225][1] = "this guy just asked if he could borrow my kidney :/"
 
 end
 
+function fade_scr(fa)
+	fa=max(min(1,fa),0)
+	local fn=8
+	local pn=15
+	local fc=1/fn
+	local fi=flr(fa/fc)+1
+	local fades={
+		{1,1,1,1,0,0,0,0},
+		{2,2,2,1,1,0,0,0},
+		{3,3,4,5,2,1,1,0},
+		{4,4,2,2,1,1,1,0},
+		{5,5,2,2,1,1,1,0},
+		{6,6,13,5,2,1,1,0},
+		{7,7,6,13,5,2,1,0},
+		{8,8,9,4,5,2,1,0},
+		{9,9,4,5,2,1,1,0},
+		{10,15,9,4,5,2,1,0},
+		{11,11,3,4,5,2,1,0},
+		{12,12,13,5,5,2,1,0},
+		{13,13,5,5,2,1,1,0},
+		{14,9,9,4,5,2,1,0},
+		{15,14,9,4,5,2,1,0}
+	}
+	
+	for n=1,pn do
+		pal(n,fades[n][fi],0)
+	end
+end
+
 function buildtweet(str)
 	local tweet = ""
 	local maxlength = 24
@@ -401,6 +430,8 @@ function _init()
  camx = p.x
  camy = p.y
  cambox = 24
+ 
+ starttime=time()
  
  npcs = {}
  bubbles = {}
@@ -674,6 +705,7 @@ function _draw()
 				spr(54,e[2]-4,e[3]-12)
 			end
 		end
+		
   if tweeting then
   	rectfill(camx-58, camy-16, camx+58, camy+36, 7)
   	spr(5, camx-52, camy-12)
@@ -684,7 +716,10 @@ function _draw()
   	rectfill(camx+36, camy+26, camx+48, camy+32, 8)
   	print("Ž",camx+23,camy+27,7)
 			print("—",camx+39,camy+27,7)
-end
+	end
+	if time() < 10 then
+		fade_scr(1-(time()-starttime)*0.75)
+	end
 end
 __gfx__
 001110000011100000011100000111000ccccc0000999990006660000000000000444000000300000003000000020000000020000066660000666600ffffffff
