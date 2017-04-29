@@ -372,7 +372,7 @@ end
 
 function buildtweet(str)
 	local tweet = ""
-	local maxlength = 24
+	local maxlength = 22
 	local length = 0
 	local lastspace = 0
 	local subpos = {}
