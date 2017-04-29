@@ -624,7 +624,7 @@ function _update()
 	
 	if caninteract then
 	
-		if btn(4) and not tweeting then
+		if btn(4) and not tweeting and time()-canceltime > 0.3 then
 			local corx = 0
 			local cory = 0
 			if p.facing == 0 then
@@ -647,9 +647,7 @@ function _update()
 			
 			for i in pairs(npcs) do
 				local s = npcs[i]
-				
-				
-				
+
 				if fget(s.sprite,1) then
 					local li = p.x+corx>=s.x
 					local ri = p.x+corx<=s.x+s.w
