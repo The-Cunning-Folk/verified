@@ -224,6 +224,10 @@ function inittweets()
 	trig = 256
 	
 	tweets = {}
+	endtweets = {}
+	endtweets[256] = {}
+	
+	endtweets[256][1] = "my ship is finally fixed! i hope i never come here again."
 	
 	for i=0,256 do
 		tweets[i] = {}
@@ -392,14 +396,29 @@ function buildtweet(str)
 		substart = subpos[i]+1
 		tweet = tweet .. bit
 	end
-	trig = 0
+	trig = 256
+
 	return tweet
 
+end
+
+function contains(tab,e)
+  for _, value in pairs(tab) do
+    if value == e then
+      return true
+    end
+  end
+  return false
 end
 
 function choosetweet(trigid)
 	if tweets[trigid]==nil or  #tweets[trigid] == 0 then
 		trigid = 256
+	end
+	if trigid != 256 then
+		if not contains(written,trigid) then
+			written[#written+1] = trigid
+		end
 	end
 	return buildtweet(tweets[trigid][flr(rnd(#tweets[trigid]))+1])
 end
@@ -432,6 +451,16 @@ function _init()
  cambox = 24
  
  starttime=time()
+ endtime = 0
+ maxtime = 0
+ 
+ caninteract=true
+ ending = false
+ lasttweet = false
+ textalert = false
+ 
+ written = {}
+ maxtweets = 1
  
  npcs = {}
  bubbles = {}
@@ -501,13 +530,14 @@ function _init()
  tweeting = false
  inittweets()
  canceltime = time()
- --music(0,0,14)
+ music(0,0,14)
  
 end
 
 
 
 function _update()
+
 
 	--player controls
 	if not tweeting then
@@ -535,6 +565,17 @@ function _update()
 		
 		p:move(pdx,pdy)
 		animateplayer()
+		if #written >= maxtweets and not lasttweet then
+			tweets = endtweets
+			lasttweet = true
+			maxtime = time()
+			caninteract = false
+		end
+		if lasttweet and time()-maxtime > 1 and not textalert then
+			sfx(0)
+			textalert = true
+		end
+		
 	end
 	
 	collision(p)
@@ -572,51 +613,53 @@ function _update()
 	
 	--interaction
 	
-	if btn(4) and not tweeting then
-		local corx = 0
-		local cory = 0
-		if p.facing == 0 then
-			cory = -2
-		elseif p.facing == 2 then
-			cory = 10
-		else
-			cory = 4
-		end
-		
-		if p.facing == 1 then
-			corx = 10
-		elseif p.facing == 3 then
-			corx = -2
-		else
-			corx = 4
-		end
-		
-		local interacting = false
-		
-		for i in pairs(npcs) do
-			local s = npcs[i]
+	if caninteract then
+	
+		if btn(4) and not tweeting then
+			local corx = 0
+			local cory = 0
+			if p.facing == 0 then
+				cory = -2
+			elseif p.facing == 2 then
+				cory = 10
+			else
+				cory = 4
+			end
 			
+			if p.facing == 1 then
+				corx = 10
+			elseif p.facing == 3 then
+				corx = -2
+			else
+				corx = 4
+			end
 			
+			local interacting = false
 			
-			if fget(s.sprite,1) then
-				local li = p.x+corx>=s.x
-				local ri = p.x+corx<=s.x+s.w
-				local ti = p.y+cory>=s.y
-				local bi = p.y+cory<=s.y+s.h
-				if (li and ri and ti and bi) then
-					interact(s.sprite,s.x,s.y)
+			for i in pairs(npcs) do
+				local s = npcs[i]
+				
+				
+				
+				if fget(s.sprite,1) then
+					local li = p.x+corx>=s.x
+					local ri = p.x+corx<=s.x+s.w
+					local ti = p.y+cory>=s.y
+					local bi = p.y+cory<=s.y+s.h
+					if (li and ri and ti and bi) then
+						interact(s.sprite,s.x,s.y)
+					end
+				end
+			end
+			
+			if not interacting then
+				local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
+				if fget(ispr,1) then
+					interact(ispr,p.x+corx,p.y+cory)
 				end
 			end
 		end
-		
-		if not interacting then
-			local ispr = mget(getcell(p.x+corx),getcell(p.y+cory))
-			if fget(ispr,1) then
-				interact(ispr,p.x+corx,p.y+cory)
-			end
-		end
 	end
-	
 	--tweeting
 	
 	if btn(5) and time()-canceltime>0.3 and  not tweeting then
@@ -631,6 +674,10 @@ function _update()
 	if btn(5) and tweeting and time()-ttime > 0.5 then
 		tweeting = false
 		canceltime = time()
+		if lasttweet then
+			ending = true
+			endtime = time()
+		end
 	end
 	
 	if tweeting then
@@ -644,6 +691,10 @@ function _update()
 	if tweeting and btn(4) then
 		tweeting = false
 		canceltime = time()
+		if lasttweet then
+			ending = true
+			endtime = time()
+		end
 	end
 	
 	
@@ -719,6 +770,10 @@ function _draw()
 	end
 	if time() < 10 then
 		fade_scr(1-(time()-starttime)*0.75)
+	end
+	if ending and time()-endtime < 2 then
+		print("hi!")
+		fade_scr((time()-endtime)*0.75)
 	end
 end
 __gfx__
@@ -888,10 +943,10 @@ __map__
 4747474747474547474547474747474547464546474547474747474547454747474747454745474647474747474747464747474547474747474545474547474745474747474745000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 4747474747474747474747454747474746474747474747474747454747474747454747474747474747474747474747474747474747474747474747474747474747474747474747000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
 __sfx__
-011000001d7261d7361c7261d7361c705000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
-01180000115201152011520115201152011520115201152015520155201552015520155201552015520155200e5200e5200e5200e5200e5200e5200e5200e5200c5200c5200c5200c52013520135201352013520
-0118000015520155101551015510155101551015510155100c5200c5100c5100c5100c5100c5100c5100c51011520115101151011510115101151011510115101552015510155101551016510165101651016510
-011800000c5200c5100c5100c5100c5100c5100c5100c51010520105101051010510105101051010510105101552015510155101551015510155101551015510135201351013510135100e5200e5100e5100e510
+011000001a1262212629126263001a126221262912624300233002430000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+01180000115101151011510115101151011510115101151015510155101551015510155101551015510155100e5100e5100e5100e5100e5100e5100e5100e5100c5100c5100c5100c51013510135101351013510
+0118000015510155101551015510155101551015510155100c5100c5100c5100c5100c5100c5100c5100c51011510115101151011510115101151011510115101551015510155101551016510165101651016510
+011800000c5100c5100c5100c5100c5100c5100c5100c51010510105101051010510105101051010510105101551015510155101551015510155101551015510135101351013510135100e5100e5100e5100e510
 011800001d0221d01021022210102402224010210222101021022210102402224010280222801024022240102602226010260102601026010260101d0001d0001f0221f010180011800122022220101d0021d002
 011800001c6131a6031a613000031c613000031c603000031c613000031c603000031c613000031c603000031c613000031a613000031c613000031c603000031c613000031c603000031c613000031c60300003
 0118000029022290102802228010240222401021022210102b0222b01029022290102802228010240222401026022260102601026010260102601000000000000000000000000000000000000000000000000000
